@@ -1,3 +1,5 @@
+import 'package:vibekla/config/app_config.dart';
+
 // ─── Capabilities ─────────────────────────────────────────────────────────────
 // Flat capability set returned by GET /api/auth/capabilities. The backend is the
 // single authority on what a role may do (see role_capabilities() in config.php),
@@ -280,7 +282,7 @@ class Venue {
         contactPhone: json['contactPhone'] as String?,
         contactEmail: json['contactEmail'] as String?,
         instagramHandle: json['instagramHandle'] as String?,
-        imageUrl: json['imageUrl'] as String?,
+        imageUrl: json['imageUrl'] != null ? AppConfig.resolveImageUrl(json['imageUrl'] as String) : null,
         vibeScore: (json['vibeScore'] as num?)?.toDouble() ?? 0.0,
         bayesRating: (json['bayesRating'] as num?)?.toDouble() ?? 0.0,
         trendingScore: (json['trendingScore'] as num?)?.toDouble() ?? 0.0,
@@ -396,7 +398,7 @@ class Event {
         capacity: (json['capacity'] as num?)?.toInt(),
         createdBy: json['createdBy'] as String?,
         isApproved: json['isApproved'] as bool? ?? true,
-        imageUrl: json['imageUrl'] as String?,
+        imageUrl: json['imageUrl'] != null ? AppConfig.resolveImageUrl(json['imageUrl'] as String) : null,
         ticketTypes: (json['ticketTypes'] as List?)
                 ?.map((t) => TicketType.fromJson(t as Map<String, dynamic>))
                 .toList() ??

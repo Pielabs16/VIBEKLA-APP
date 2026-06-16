@@ -8,8 +8,23 @@ class AppConfig {
 
   static const int apiTimeoutSeconds = int.fromEnvironment(
     'API_TIMEOUT',
-    defaultValue: 10,
+    defaultValue: 30,
   );
+
+  // Base URL of the file server (without /api). Used to resolve relative image paths.
+  static String get fileBaseUrl {
+    const base = apiBaseUrl;
+    final idx = base.lastIndexOf('/api');
+    return idx >= 0 ? base.substring(0, idx) : base;
+  }
+
+  // Resolves an imageUrl from the API: returns it as-is if absolute, otherwise
+  // prepends fileBaseUrl so Image.network() gets a valid URL.
+  static String resolveImageUrl(String path) {
+    if (path.startsWith('http://') || path.startsWith('https://')) return path;
+    final base = fileBaseUrl;
+    return path.startsWith('/') ? '$base$path' : '$base/$path';
+  }
 
   static const bool debugApi = bool.fromEnvironment('DEBUG_API');
 
