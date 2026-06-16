@@ -27,8 +27,6 @@ class StorageService {
     _prefs     = await SharedPreferences.getInstance();
   }
 
-  // ── Venues ──────────────────────────────────────────────────────────────────
-
   Future<void> saveVenues(List<Venue> venues) async {
     final box = _venues;
     if (box == null) return;
@@ -56,8 +54,6 @@ class StorageService {
   Future<void> saveVenue(Venue venue) async {
     await _venues?.put(venue.id, venue.toJson());
   }
-
-  // ── Events ───────────────────────────────────────────────────────────────────
 
   Future<void> saveEvents(List<Event> events) async {
     final box = _events;
@@ -87,8 +83,6 @@ class StorageService {
     await _events?.put(event.id, event.toJson());
   }
 
-  // ── Check-ins ────────────────────────────────────────────────────────────────
-
   Future<void> saveCheckIn(CheckIn checkIn) async {
     await _checkIns?.put(checkIn.id, checkIn.toJson());
   }
@@ -101,8 +95,6 @@ class StorageService {
         CheckIn.fromJson(Map<String, dynamic>.from(box.getAt(i) as Map)),
     ];
   }
-
-  // ── Bookmarks ────────────────────────────────────────────────────────────────
 
   List<String> getBookmarks() {
     final raw = _bookmarks?.get('bookmarks');
@@ -127,8 +119,6 @@ class StorageService {
   bool isBookmarked(String entityId, String entityType) {
     return getBookmarks().contains('$entityType:$entityId');
   }
-
-  // ── Preferences ──────────────────────────────────────────────────────────────
 
   Future<void> setLastViewedVenue(String venueId) async =>
       _prefs?.setString('last_viewed_venue', venueId);

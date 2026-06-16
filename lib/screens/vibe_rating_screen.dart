@@ -113,7 +113,6 @@ class _VibeRatingScreenState extends State<VibeRatingScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Entity name
             Text(
               widget.entityName,
               textAlign: TextAlign.center,
@@ -133,7 +132,6 @@ class _VibeRatingScreenState extends State<VibeRatingScreen>
             ),
             const SizedBox(height: 32),
 
-            // Stars
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(5, (i) {
@@ -187,7 +185,6 @@ class _VibeRatingScreenState extends State<VibeRatingScreen>
             ),
             const SizedBox(height: 32),
 
-            // Vibe tags
             const Text(
               'Tag the vibe',
               style: TextStyle(
@@ -242,7 +239,6 @@ class _VibeRatingScreenState extends State<VibeRatingScreen>
             ),
             const SizedBox(height: 24),
 
-            // Comment
             const Text(
               'Leave a comment (optional)',
               style: TextStyle(
@@ -264,7 +260,6 @@ class _VibeRatingScreenState extends State<VibeRatingScreen>
             ),
             const SizedBox(height: 28),
 
-            // Submit
             GestureDetector(
               onTap: _submitting ? null : _submit,
               child: Container(

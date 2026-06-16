@@ -49,8 +49,6 @@ class AuthProvider extends ChangeNotifier {
 
   final ApiService _api = ApiService();
 
-  // ── Boot ──────────────────────────────────────────────────────────────────
-
   Future<void> restoreSession() async {
     final prefs = await SharedPreferences.getInstance();
     final access = prefs.getString(_keyAccess);
@@ -84,8 +82,6 @@ class AuthProvider extends ChangeNotifier {
     if (_isAuthenticated) _loadCapabilities();
   }
 
-  // ── Capabilities ────────────────────────────────────────────────────────────
-
   /// Optimistic, offline-safe capability set derived from the JWT role. Applied
   /// immediately on auth so the UI gates correctly even before the server call.
   void _applyRoleCapabilities() {
@@ -109,8 +105,6 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  // ── Sign in ───────────────────────────────────────────────────────────────
-
   Future<void> signInWithEmail(String email, String password) async {
     _setLoading(true);
     try {
@@ -133,12 +127,9 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  // ── Sign up ───────────────────────────────────────────────────────────────
-
   String? _pendingEmail;
   String? get pendingEmail => _pendingEmail;
 
-  /// Returns true when registration succeeded and OTP is needed.
   Future<bool> signUp(
       String email, String password, String firstName, String lastName) async {
     _setLoading(true);
@@ -185,8 +176,6 @@ class AuthProvider extends ChangeNotifier {
     } catch (_) {}
   }
 
-  // ── Sign out ──────────────────────────────────────────────────────────────
-
   Future<void> signOut() async {
     final prefs = await SharedPreferences.getInstance();
     final refresh = prefs.getString(_keyRefresh);
@@ -202,8 +191,6 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ── Refresh user data ─────────────────────────────────────────────────────
-
   Future<void> refreshAuth() async {
     if (!_isAuthenticated) return;
     try {
@@ -211,8 +198,6 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
     } catch (_) {}
   }
-
-  // ── Helpers ───────────────────────────────────────────────────────────────
 
   void _setLoading(bool v) {
     _isLoading = v;

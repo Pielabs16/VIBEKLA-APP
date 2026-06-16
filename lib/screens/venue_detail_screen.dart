@@ -293,9 +293,7 @@ class _VenueHeroAppBar extends StatelessWidget {
         background: Stack(
           fit: StackFit.expand,
           children: [
-            // Background colour / gradient
             Container(color: AppTheme.cardColor(venue.imageType)),
-            // Actual venue image (if available)
             if (venue.imageUrl != null && venue.imageUrl!.isNotEmpty)
               Image.network(
                 venue.imageUrl!,

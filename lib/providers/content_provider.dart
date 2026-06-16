@@ -15,7 +15,6 @@ class ContentProvider extends ChangeNotifier {
 
   String _selectedRegion = 'Kampala, UG';
 
-  // ── Fallbacks ──────────────────────────────────────────────────────────────
   static const _fallbackGenres = [
     'Afrobeats', 'Amapiano', 'Hip Hop', 'R&B', 'Electronic', 'Live Band',
   ];
@@ -39,7 +38,6 @@ class ContentProvider extends ChangeNotifier {
     VibeTag(name: 'Dead Inside', emoji: '💀'),
   ];
 
-  // ── Getters (serve fallbacks until server responds) ──────────────────────
   List<String> get genres          => _genres.isNotEmpty          ? _genres          : _fallbackGenres;
   List<String> get venueCategories => _venueCategories.isNotEmpty ? _venueCategories : _fallbackCategories;
   List<VibeTag> get vibeTags       => _vibeTags.isNotEmpty        ? _vibeTags        : _fallbackVibeTags;
@@ -51,7 +49,6 @@ class ContentProvider extends ChangeNotifier {
   String get googleMapsApiKey => _appSettings['google_maps_api_key'] as String? ?? '';
   bool get hasLoaded => _loaded;
 
-  // ── Region selector ───────────────────────────────────────────────────────
   String get selectedRegion => _selectedRegion;
 
   List<String> get allRegions {
@@ -68,7 +65,6 @@ class ContentProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ── Fetch ─────────────────────────────────────────────────────────────────
   Future<void> fetchContent() async {
     try {
       final result = await ApiService().fetchContent();

@@ -166,7 +166,6 @@ class _EventContent extends StatelessWidget {
   }
 
   Widget _buildTicketCta(BuildContext context) {
-    // In-app ticketing — open the booking sheet.
     if (event.hasInternalTicketing) {
       final cheapest = event.ticketTypes
           .map((t) => t.priceUgx)
@@ -182,7 +181,6 @@ class _EventContent extends StatelessWidget {
         ],
       );
     }
-    // External ticketing link.
     if (event.hasExternalTickets) {
       return GradientButton(
         label: 'Get Tickets',
@@ -193,7 +191,6 @@ class _EventContent extends StatelessWidget {
         ),
       );
     }
-    // No ticketing configured — show entry/cover info instead.
     final cover = event.cover.trim();
     final hasCover = cover.isNotEmpty && cover != '0';
     return Container(

@@ -1,6 +1,4 @@
 class AppConfig {
-  // Production API endpoint is live at https://vibekla.jambohub.org/api.
-  // Override with the API_BASE_URL environment variable for local/dev testing.
   static const String apiBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
     defaultValue: 'https://vibekla.jambohub.org/api',
@@ -18,8 +16,6 @@ class AppConfig {
     return idx >= 0 ? base.substring(0, idx) : base;
   }
 
-  // Resolves an imageUrl from the API: returns it as-is if absolute, otherwise
-  // prepends fileBaseUrl so Image.network() gets a valid URL.
   static String resolveImageUrl(String path) {
     if (path.startsWith('http://') || path.startsWith('https://')) return path;
     final base = fileBaseUrl;

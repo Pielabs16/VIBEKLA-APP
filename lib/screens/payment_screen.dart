@@ -10,11 +10,7 @@ import '../models/models.dart';
 import '../providers/auth_provider.dart';
 import '../services/api_service.dart';
 
-// ── Payment method ─────────────────────────────────────────────────────────────
-
 enum _Method { mobileMoney, card }
-
-// ── Screen ────────────────────────────────────────────────────────────────────
 
 class PaymentScreen extends StatefulWidget {
   final String venueId;
@@ -31,23 +27,19 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
-  // Data
   List<PaymentPlan> _plans = [];
   String? _selectedPlanId;
   String? _currentTier;
 
-  // UI state
   bool _loading = true;
   int _step = 0; // 0=plans, 1=method+phone, 2=processing, 3=success, 4=failure
 
-  // Payment state
   _Method _method = _Method.mobileMoney;
   final _phoneCtrl = TextEditingController();
   String? _reference;     // idempotency UUID – persisted in prefs to survive restarts
   String? _redirectUrl;
   String? _errorMsg;
 
-  // Polling
   Timer? _pollTimer;
   int _pollCount = 0;
   static const int _maxPolls = 100; // 5 min at 3s intervals
@@ -64,8 +56,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
     _phoneCtrl.dispose();
     super.dispose();
   }
-
-  // ── Data loading ──────────────────────────────────────────────────────────────
 
   Future<void> _load() async {
     try {
@@ -87,8 +77,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
     }
   }
 
-  // ── Idempotency reference ─────────────────────────────────────────────────────
-
   Future<String> _getOrCreateReference() async {
     final prefs = await SharedPreferences.getInstance();
     final key   = 'pay_ref_${widget.venueId}_$_selectedPlanId';
@@ -105,8 +93,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
     final key   = 'pay_ref_${widget.venueId}_$_selectedPlanId';
     await prefs.remove(key);
   }
-
-  // ── Payment flow ──────────────────────────────────────────────────────────────
 
   Future<void> _proceed() async {
     if (_selectedPlanId == null) return;
@@ -153,8 +139,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       _redirectUrl = result['redirectUrl'] as String?;
 
       if (_method == _Method.card && _redirectUrl != null) {
-        // Open card gateway in browser
-        await launchUrl(
+          await launchUrl(
           Uri.parse(_redirectUrl!),
           mode: LaunchMode.externalApplication,
         );
@@ -163,7 +148,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
         }
       }
 
-      // Start polling for status
       _startPolling();
     } on ApiException catch (e) {
       if (mounted) {
@@ -216,8 +200,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
       }
     });
   }
-
-  // ── Build ─────────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
@@ -307,8 +289,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 }
 
-// ── Step 0: Plan selection ────────────────────────────────────────────────────
-
 class _PlanStep extends StatelessWidget {
   final List<PaymentPlan> plans;
   final String? selectedId;
@@ -366,8 +346,6 @@ class _PlanStep extends StatelessWidget {
   }
 }
 
-// ── Step 1: Method + phone ────────────────────────────────────────────────────
-
 class _MethodStep extends StatelessWidget {
   final PaymentPlan plan;
   final _Method method;
@@ -393,7 +371,6 @@ class _MethodStep extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Amount summary
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
@@ -553,8 +530,6 @@ class _MethodStep extends StatelessWidget {
   }
 }
 
-// ── Step 2: Processing / waiting ──────────────────────────────────────────────
-
 class _ProcessingStep extends StatelessWidget {
   final _Method method;
   final String? redirectUrl;
@@ -644,8 +619,6 @@ class _ProcessingStep extends StatelessWidget {
   }
 }
 
-// ── Step 3: Success ───────────────────────────────────────────────────────────
-
 class _SuccessStep extends StatelessWidget {
   final String planName;
   final VoidCallback onDone;
@@ -705,8 +678,6 @@ class _SuccessStep extends StatelessWidget {
     );
   }
 }
-
-// ── Step 4: Failure ───────────────────────────────────────────────────────────
 
 class _FailureStep extends StatelessWidget {
   final String message;
@@ -787,8 +758,6 @@ class _FailureStep extends StatelessWidget {
     );
   }
 }
-
-// ── Shared widgets ────────────────────────────────────────────────────────────
 
 class _VenueHeader extends StatelessWidget {
   final String name;

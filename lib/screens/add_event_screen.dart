@@ -188,7 +188,6 @@ class _AddEventScreenState extends State<AddEventScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Venue badge
             Container(
               padding:
                   const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

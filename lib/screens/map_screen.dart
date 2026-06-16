@@ -134,13 +134,11 @@ class _MapScreenState extends State<MapScreen> {
 
           return Stack(
             children: [
-              // ── Map WebView ──────────────────────────────────────────────────
               if (_webCtrl != null)
                 WebViewWidget(controller: _webCtrl!)
               else
                 const _MapPlaceholder(message: 'Initializing map…'),
 
-              // ── Top gradient scrim ───────────────────────────────────────────
               Positioned(
                 top: 0, left: 0, right: 0,
                 height: MediaQuery.of(ctx).padding.top + 90,
@@ -155,7 +153,6 @@ class _MapScreenState extends State<MapScreen> {
                 ),
               ),
 
-              // ── Header pill ──────────────────────────────────────────────────
               Positioned(
                 top: MediaQuery.of(ctx).padding.top + 12,
                 left: 16,
@@ -209,7 +206,6 @@ class _MapScreenState extends State<MapScreen> {
                 ),
               ),
 
-              // ── Location button ──────────────────────────────────────────────
               Positioned(
                 top: MediaQuery.of(ctx).padding.top + 12,
                 right: 16,
@@ -236,7 +232,6 @@ class _MapScreenState extends State<MapScreen> {
                 ),
               ),
 
-              // ── Top vibe badge ───────────────────────────────────────────────
               if (topVibe != null && _selectedVenue == null)
                 Positioned(
                   top: MediaQuery.of(ctx).padding.top + 72,
@@ -244,7 +239,6 @@ class _MapScreenState extends State<MapScreen> {
                   child: _TopVibeBadge(venue: topVibe),
                 ),
 
-              // ── Venue popup ──────────────────────────────────────────────────
               if (_selectedVenue != null)
                 Positioned(
                   bottom: 24,
@@ -341,8 +335,6 @@ class _MapScreenState extends State<MapScreen> {
 ''';
 }
 
-// ─── Placeholder (loading / no key) ──────────────────────────────────────────
-
 class _MapPlaceholder extends StatelessWidget {
   final String message;
   final IconData icon;
@@ -372,8 +364,6 @@ class _MapPlaceholder extends StatelessWidget {
     );
   }
 }
-
-// ─── Top vibe badge ───────────────────────────────────────────────────────────
 
 class _TopVibeBadge extends StatelessWidget {
   final Venue venue;
@@ -425,8 +415,6 @@ class _TopVibeBadge extends StatelessWidget {
     );
   }
 }
-
-// ─── Venue popup card ─────────────────────────────────────────────────────────
 
 class _VenuePopup extends StatelessWidget {
   final Venue venue;

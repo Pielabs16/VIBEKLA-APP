@@ -71,7 +71,6 @@ class _AuthScreenState extends State<AuthScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const SizedBox(height: 16),
-                  // Back button
                   Align(
                     alignment: Alignment.centerLeft,
                     child: GestureDetector(
@@ -92,7 +91,6 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                   ),
                   const SizedBox(height: 40),
-                  // Logo
                   const Text(
                     'VibeKLA',
                     textAlign: TextAlign.center,
@@ -113,7 +111,6 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                   ),
                   const SizedBox(height: 48),
-                  // Card
                   Container(
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(

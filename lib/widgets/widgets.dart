@@ -4,8 +4,6 @@ import '../models/models.dart';
 import '../providers/bookmarks_provider.dart';
 import '../config/theme.dart';
 
-// ─── Section Header ──────────────────────────────────────────────────────────
-
 class VibeSectionHeader extends StatelessWidget {
   final String title;
   final String? subtitle;
@@ -50,8 +48,6 @@ class VibeSectionHeader extends StatelessWidget {
     );
   }
 }
-
-// ─── ShimmerBox ───────────────────────────────────────────────────────────────
 
 class ShimmerBox extends StatefulWidget {
   final double width;
@@ -106,8 +102,6 @@ class _ShimmerBoxState extends State<ShimmerBox>
   }
 }
 
-// ─── Loading Shimmer List ─────────────────────────────────────────────────────
-
 class LoadingShimmer extends StatelessWidget {
   final int count;
   final double height;
@@ -132,8 +126,6 @@ class LoadingShimmer extends StatelessWidget {
   }
 }
 
-// ─── Network image with translucent overlay ───────────────────────────────────
-
 class _VibeNetworkImage extends StatelessWidget {
   final String? url;
   final String imageType;
@@ -154,9 +146,7 @@ class _VibeNetworkImage extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          // Solid colour fallback always visible
           Container(color: AppTheme.cardColor(imageType)),
-          // Network image on top
           if (url != null && url!.isNotEmpty)
             Image.network(
               url!,
@@ -165,7 +155,6 @@ class _VibeNetworkImage extends StatelessWidget {
                   progress == null ? child : const SizedBox.shrink(),
               errorBuilder: (_, __, ___) => const SizedBox.shrink(),
             ),
-          // Translucent gradient overlay for elegant finish
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -183,8 +172,6 @@ class _VibeNetworkImage extends StatelessWidget {
     );
   }
 }
-
-// ─── Featured Event Card (horizontal scroll, hero style) ─────────────────────
 
 class FeaturedEventCard extends StatelessWidget {
   final Event event;
@@ -225,7 +212,6 @@ class FeaturedEventCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(18),
               ),
             ),
-            // Top row: genre chip + bookmark
             Positioned(
               top: 18,
               left: 18,
@@ -308,7 +294,6 @@ class FeaturedEventCard extends StatelessWidget {
                 ),
               ),
             ),
-            // Bottom content
             Positioned(
               left: 18,
               right: 18,
@@ -380,8 +365,6 @@ class FeaturedEventCard extends StatelessWidget {
     );
   }
 }
-
-// ─── Venue Mini Card (horizontal scroll) ─────────────────────────────────────
 
 class VenueMiniCard extends StatelessWidget {
   final Venue venue;
@@ -494,8 +477,6 @@ class VenueMiniCard extends StatelessWidget {
   }
 }
 
-// ─── Event Card (list, row variant) ──────────────────────────────────────────
-
 class EventCard extends StatelessWidget {
   final Event event;
   final VoidCallback onTap;
@@ -527,7 +508,6 @@ class EventCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Left: genre label + time
             SizedBox(
               width: 64,
               child: Column(
@@ -559,14 +539,12 @@ class EventCard extends StatelessWidget {
                 ],
               ),
             ),
-            // Vertical divider
             Container(
               width: 1,
               height: 44,
               margin: const EdgeInsets.symmetric(horizontal: 14),
               color: AppTheme.borderColor,
             ),
-            // Content
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -625,7 +603,6 @@ class EventCard extends StatelessWidget {
                 ],
               ),
             ),
-            // Bookmark
             Consumer<BookmarksProvider>(
               builder: (context, bookmarks, _) {
                 final saved = bookmarks.isEventBookmarked(event.id);
@@ -653,8 +630,6 @@ class EventCard extends StatelessWidget {
   }
 }
 
-// ─── Venue Card (list, row variant) ──────────────────────────────────────────
-
 class VenueCard extends StatelessWidget {
   final Venue venue;
   final VoidCallback onTap;
@@ -680,7 +655,6 @@ class VenueCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // Thumbnail
             SizedBox(
               width: 110,
               height: 110,
@@ -697,7 +671,6 @@ class VenueCard extends StatelessWidget {
                 ],
               ),
             ),
-            // Content
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(
@@ -706,7 +679,6 @@ class VenueCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Category pill
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 4),
@@ -795,7 +767,6 @@ class VenueCard extends StatelessWidget {
                 ),
               ),
             ),
-            // Bookmark
             Padding(
               padding: const EdgeInsets.only(right: 14),
               child: Consumer<BookmarksProvider>(
@@ -822,8 +793,6 @@ class VenueCard extends StatelessWidget {
     );
   }
 }
-
-// ─── Error Widget ─────────────────────────────────────────────────────────────
 
 class VibeErrorWidget extends StatelessWidget {
   final String message;
@@ -871,8 +840,6 @@ class VibeErrorWidget extends StatelessWidget {
     );
   }
 }
-
-// ─── Empty State ──────────────────────────────────────────────────────────────
 
 class EmptyState extends StatelessWidget {
   final IconData icon;
@@ -923,8 +890,6 @@ class EmptyState extends StatelessWidget {
   }
 }
 
-// ─── Filter Chip ──────────────────────────────────────────────────────────────
-
 class VibeFilterChip extends StatelessWidget {
   final String label;
   final bool selected;
@@ -963,8 +928,6 @@ class VibeFilterChip extends StatelessWidget {
     );
   }
 }
-
-// ─── Rating Bar ───────────────────────────────────────────────────────────────
 
 class RatingBar extends StatelessWidget {
   final double rating;
@@ -1008,8 +971,6 @@ class RatingBar extends StatelessWidget {
     );
   }
 }
-
-// ─── Gradient Button ─────────────────────────────────────────────────────────
 
 class GradientButton extends StatelessWidget {
   final String label;

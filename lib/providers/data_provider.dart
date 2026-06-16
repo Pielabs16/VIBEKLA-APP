@@ -11,7 +11,6 @@ class DataProvider extends ChangeNotifier {
   bool _isLoadingMore = false;
   String? _error;
 
-  // Pagination
   int _venuesPage = 1;
   bool _venuesHasMore = true;
   int _eventsPage = 1;
@@ -25,8 +24,6 @@ class DataProvider extends ChangeNotifier {
   bool get hasVenueError => _error != null && _venues.isEmpty;
   bool get venuesHasMore => _venuesHasMore;
   bool get eventsHasMore => _eventsHasMore;
-
-  // ── Initial load ─────────────────────────────────────────────────────────────
 
   Future<void> fetchAll({bool refresh = false}) async {
     if (refresh) {
@@ -95,8 +92,6 @@ class DataProvider extends ChangeNotifier {
     }
   }
 
-  // ── Pagination ───────────────────────────────────────────────────────────────
-
   Future<void> loadMoreVenues() async {
     if (_isLoadingMore || !_venuesHasMore) return;
     _isLoadingMore = true;
@@ -129,8 +124,6 @@ class DataProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-  // ── Search + server-side filter ──────────────────────────────────────────────
 
   Future<List<Venue>> searchVenues(String query,
       {String? category, String? region, String? sort,
@@ -190,8 +183,6 @@ class DataProvider extends ChangeNotifier {
     }
   }
 
-  // ── Lookups ──────────────────────────────────────────────────────────────────
-
   Venue? getVenueById(String id) {
     try { return _venues.firstWhere((v) => v.id == id); } catch (_) { return null; }
   }
@@ -208,8 +199,6 @@ class DataProvider extends ChangeNotifier {
 
   List<Event> get featuredEvents =>
       _events.where((e) => e.featured).toList();
-
-  // ── Helpers ──────────────────────────────────────────────────────────────────
 
   void clearError() {
     _error = null;

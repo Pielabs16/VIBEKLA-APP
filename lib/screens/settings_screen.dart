@@ -56,7 +56,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          // ── Notifications ───────────────────────────────────────────────────
           const _SectionHeader('Notifications'),
           _SettingsGroup(children: [
             _SettingRow(
@@ -91,8 +90,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ]),
 
           const SizedBox(height: 20),
-
-          // ── Legal ───────────────────────────────────────────────────────────
           const _SectionHeader('Legal'),
           _SettingsGroup(children: [
             _SettingRow(
@@ -108,8 +105,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ]),
 
           const SizedBox(height: 20),
-
-          // ── App Info ────────────────────────────────────────────────────────
           const _SectionHeader('App Info'),
           _SettingsGroup(children: [
             const _SettingRow(
@@ -232,8 +227,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 }
-
-// ─── Reusable layout components ───────────────────────────────────────────────
 
 class _SectionHeader extends StatelessWidget {
   final String title;

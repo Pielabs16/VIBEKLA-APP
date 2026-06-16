@@ -29,8 +29,7 @@ class ApiService {
         if (_accessToken != null) 'Authorization': 'Bearer $_accessToken',
       };
 
-  // Build URL with optional query params. All API endpoints use query params,
-  // not path segments (e.g. /venues?id=abc, not /venues/abc).
+  // All API endpoints use query params, not path segments (e.g. /venues?id=abc, not /venues/abc).
   Uri _url(String path, [Map<String, String>? params]) {
     final uri = Uri.parse('${AppConfig.apiBaseUrl}$path');
     return params != null && params.isNotEmpty
@@ -38,8 +37,6 @@ class ApiService {
         : uri;
   }
 
-  // Silently refresh the access token using the stored refresh token.
-  // Returns true if successful. Clears tokens on failure.
   Future<bool> _tryRefresh() async {
     if (_refreshing || _storedRefreshToken == null) return false;
     _refreshing = true;
@@ -97,7 +94,6 @@ class ApiService {
     return res;
   }
 
-  // Decode a response that returns a JSON object.
   Future<Map<String, dynamic>> _decode(http.Response res) {
     final body = jsonDecode(res.body) as Map<String, dynamic>;
     if (res.statusCode >= 400) {
@@ -109,7 +105,6 @@ class ApiService {
     return Future.value(body);
   }
 
-  // Decode a response that returns a JSON array directly.
   Future<List<dynamic>> _decodeList(http.Response res) {
     if (res.statusCode >= 400) {
       final body = jsonDecode(res.body);
@@ -158,7 +153,6 @@ class ApiService {
     return _decode(res);
   }
 
-  /// Verify email OTP after registration. Returns full AuthResult on success.
   Future<AuthResult> verifyOtp(String email, String code) async {
     final res = await http
         .post(_url('/auth/verify-otp'),
@@ -169,7 +163,6 @@ class ApiService {
     return AuthResult.fromJson(body);
   }
 
-  /// Request a new OTP for an unverified account.
   Future<Map<String, dynamic>> resendOtp(String email) async {
     final res = await http
         .post(_url('/auth/resend-otp'),

@@ -148,7 +148,6 @@ class _VenueDashboard extends StatelessWidget {
               ),
               child: Stack(
                 children: [
-                  // Decorative circles
                   Positioned(
                     top: -30,
                     right: -30,
@@ -173,7 +172,6 @@ class _VenueDashboard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Content
                   Positioned(
                     bottom: 60,
                     left: 20,
@@ -287,7 +285,6 @@ class _OverviewTab extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Stats row
           Row(
             children: [
               _StatBox(
@@ -312,7 +309,6 @@ class _OverviewTab extends StatelessWidget {
           ),
           const SizedBox(height: 20),
 
-          // Actions
           _ActionCard(
             icon: '🎉',
             title: 'Add New Event',
@@ -333,7 +329,6 @@ class _OverviewTab extends StatelessWidget {
             const SizedBox(height: 12),
           ],
 
-          // Venue info
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -554,8 +549,6 @@ class _AnalyticsTab extends StatelessWidget {
     );
   }
 }
-
-// ── Supporting widgets ──────────────────────────────────────────────────────
 
 class _StatBox extends StatelessWidget {
   final String icon;

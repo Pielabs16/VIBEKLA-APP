@@ -24,8 +24,6 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-// ─── Signed-out state ─────────────────────────────────────────────────────────
-
 class _SignedOut extends StatelessWidget {
   const _SignedOut();
 
@@ -106,8 +104,6 @@ class _SignedOut extends StatelessWidget {
     );
   }
 }
-
-// ─── Signed-in profile ────────────────────────────────────────────────────────
 
 class _ProfileContent extends StatelessWidget {
   final AuthProvider auth;
@@ -301,7 +297,6 @@ class _ProfileMenu extends StatelessWidget {
             const SizedBox(height: 14),
           ],
 
-          // Activity
           const _SectionLabel('Activity'),
           const SizedBox(height: 8),
           _MenuSection(items: [
@@ -330,7 +325,6 @@ class _ProfileMenu extends StatelessWidget {
           ]),
           const SizedBox(height: 14),
 
-          // Support
           const _SectionLabel('Support'),
           const SizedBox(height: 8),
           _MenuSection(items: [
@@ -354,8 +348,6 @@ class _ProfileMenu extends StatelessWidget {
             ),
           ]),
           const SizedBox(height: 20),
-
-          // Sign out
           GestureDetector(
             onTap: () async {
               await auth.signOut();
@@ -406,8 +398,6 @@ class _ProfileMenu extends StatelessWidget {
     );
   }
 }
-
-// ─── Help Sheet ───────────────────────────────────────────────────────────────
 
 class _HelpSheet extends StatelessWidget {
   final List<dynamic> helpContacts;
@@ -498,8 +488,6 @@ class _HelpSheet extends StatelessWidget {
     }
   }
 }
-
-// ─── About Sheet ──────────────────────────────────────────────────────────────
 
 class _AboutSheet extends StatelessWidget {
   final List<dynamic> licenses;
@@ -609,8 +597,6 @@ class _AboutSheet extends StatelessWidget {
     );
   }
 }
-
-// ─── Shared helpers ───────────────────────────────────────────────────────────
 
 class _SectionLabel extends StatelessWidget {
   final String text;

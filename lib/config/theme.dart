@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  // ── Dark palette ─────────────────────────────────────────────────────────────
   static const Color backgroundColor = Color(0xFF0a0014);
   static const Color primaryColor = Color(0xFFff2d92);
   static const Color accentColor = Color(0xFFb026ff);
@@ -12,7 +11,6 @@ class AppTheme {
   static const Color mutedColor = Color(0xFF9b85b8);
   static const Color borderColor = Color(0xFF2a1647);
 
-  // ── Light palette ────────────────────────────────────────────────────────────
   static const Color lightBg = Color(0xFFF8F5FF);
   static const Color lightSurface = Color(0xFFFFFFFF);
   static const Color lightSurface2 = Color(0xFFF0EAFF);
@@ -44,7 +42,6 @@ class AppTheme {
     return [BoxShadow(color: color.withValues(alpha: intensity), blurRadius: 12, spreadRadius: 0)];
   }
 
-  // ── Dark text theme ──────────────────────────────────────────────────────────
   static TextTheme _darkTextTheme() => GoogleFonts.interTextTheme(
     const TextTheme(
       displayLarge:  TextStyle(fontSize: 32, fontWeight: FontWeight.w700, color: onSurfaceColor, letterSpacing: -0.5),
@@ -59,7 +56,6 @@ class AppTheme {
     ),
   );
 
-  // ── Light text theme ─────────────────────────────────────────────────────────
   static TextTheme _lightTextTheme() => GoogleFonts.interTextTheme(
     const TextTheme(
       displayLarge:  TextStyle(fontSize: 32, fontWeight: FontWeight.w700, color: lightOnSurface, letterSpacing: -0.5),

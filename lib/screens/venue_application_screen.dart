@@ -184,8 +184,6 @@ class _VenueApplicationScreenState extends State<VenueApplicationScreen> {
     );
   }
 
-  // ── Field helpers ────────────────────────────────────────────────────────────
-
   Widget _label(String text) => Padding(
         padding: const EdgeInsets.only(top: 14, bottom: 6),
         child: Text(text,

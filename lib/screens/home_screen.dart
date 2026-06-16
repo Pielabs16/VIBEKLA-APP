@@ -158,8 +158,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-// ─── Fixed static header ──────────────────────────────────────────────────────
-
 class _HomeHeader extends StatelessWidget {
   const _HomeHeader();
 
@@ -198,7 +196,6 @@ class _HomeHeader extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          // Tappable region selector
           GestureDetector(
             onTap: () => _showRegionSearch(context),
             child: Consumer<ContentProvider>(
@@ -253,8 +250,6 @@ class _HomeHeader extends StatelessWidget {
     );
   }
 }
-
-// ─── Region search bottom sheet ───────────────────────────────────────────────
 
 class _RegionSearchSheet extends StatefulWidget {
   final ContentProvider contentProvider;
@@ -392,8 +387,6 @@ class _RegionSearchSheetState extends State<_RegionSearchSheet> {
     );
   }
 }
-
-// ─── Sections (unchanged logic, cleaned up) ───────────────────────────────────
 
 class _FeaturedSection extends StatelessWidget {
   final DataProvider data;
