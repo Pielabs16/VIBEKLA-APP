@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../providers/auth_provider.dart';
 import '../providers/bookmarks_provider.dart';
 import '../providers/content_provider.dart';
@@ -465,7 +466,7 @@ class _HelpSheet extends StatelessWidget {
                     subtitle: Text(c['value'] as String? ?? '',
                         style: const TextStyle(fontSize: 13, color: AppTheme.primaryColor)),
                     trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 12, color: AppTheme.mutedColor),
-                    onTap: () {},
+                    onTap: () => _launchContact(context, c),
                   );
                 },
               ),
@@ -474,6 +475,40 @@ class _HelpSheet extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _launchContact(BuildContext context, Map<String, dynamic> c) async {
+    final type = c['icon'] as String? ?? '';
+    final value = (c['value'] as String? ?? '').trim();
+    if (value.isEmpty) return;
+
+    Uri uri;
+    LaunchMode mode = LaunchMode.externalApplication;
+
+    if (type == 'email' || value.startsWith('mailto:')) {
+      uri = Uri.parse(value.startsWith('mailto:') ? value : 'mailto:$value');
+    } else if (type == 'phone') {
+      uri = Uri.parse('tel:$value');
+    } else if (type == 'whatsapp') {
+      final digits = value.replaceAll('+', '').replaceAll(' ', '');
+      uri = Uri.parse('https://wa.me/$digits');
+    } else if (type == 'web' || value.startsWith('http')) {
+      uri = Uri.parse(value.startsWith('http') ? value : 'https://$value');
+    } else if (value.startsWith('+') || RegExp(r'^\d').hasMatch(value)) {
+      uri = Uri.parse('tel:$value');
+    } else {
+      uri = Uri.parse('https://$value');
+    }
+
+    try {
+      await launchUrl(uri, mode: mode);
+    } catch (_) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not open: $value')),
+        );
+      }
+    }
   }
 
   IconData _contactIcon(String type) {
@@ -585,7 +620,7 @@ class _AboutSheet extends StatelessWidget {
                     }),
                   ],
                   const SizedBox(height: 12),
-                  Text('© 2025 VibeKLA. All rights reserved.',
+                  Text('© ${DateTime.now().year} VibeKLA. All rights reserved.',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 11)),
                   const SizedBox(height: 8),
                 ],

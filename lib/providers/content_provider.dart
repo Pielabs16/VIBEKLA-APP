@@ -6,6 +6,7 @@ class ContentProvider extends ChangeNotifier {
   List<String> _genres = [];
   List<String> _venueCategories = [];
   List<String> _neighborhoods = [];
+  List<String> _regions = [];
   List<VibeTag> _vibeTags = [];
   List<AppBanner> _banners = [];
   List<Map<String, dynamic>> _helpContacts = [];
@@ -51,13 +52,8 @@ class ContentProvider extends ChangeNotifier {
 
   String get selectedRegion => _selectedRegion;
 
-  List<String> get allRegions {
-    final result = <String>['Kampala, UG'];
-    for (final nb in _neighborhoods) {
-      if (!result.contains(nb)) result.add(nb);
-    }
-    return result;
-  }
+  List<String> get allRegions =>
+      _regions.isNotEmpty ? _regions : ['Kampala'];
 
   void setRegion(String region) {
     if (_selectedRegion == region) return;
@@ -81,6 +77,8 @@ class ContentProvider extends ChangeNotifier {
       _neighborhoods = nbRaw
           .map((n) => (n as Map<String, dynamic>)['name'] as String)
           .toList();
+
+      _regions = List<String>.from(result['regions'] as List? ?? []);
 
       final vtRaw = result['vibeTags'] as List? ?? [];
       _vibeTags = vtRaw.map((t) => VibeTag.fromJson(t as Map<String, dynamic>)).toList();

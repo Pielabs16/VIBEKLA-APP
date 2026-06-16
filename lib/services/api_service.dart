@@ -430,7 +430,7 @@ class ApiService {
           'entityId': entityId,
           'entityType': entityType,
           'rating': rating,
-          if (vibeTags != null) 'vibeTags': vibeTags,
+          if (vibeTags != null) 'vibeTagsSelected': vibeTags,
           if (comment != null && comment.isNotEmpty) 'comment': comment,
         })));
   }

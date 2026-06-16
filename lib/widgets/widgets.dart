@@ -515,20 +515,6 @@ class EventCard extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    event.genre.length > 7
-                        ? '${event.genre.substring(0, 7).toUpperCase()}.'
-                        : event.genre.toUpperCase(),
-                    style: const TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.8,
-                      color: AppTheme.primaryColor,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.clip,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
                     event.startTime,
                     style: const TextStyle(
                       fontSize: 14,
@@ -952,8 +938,12 @@ class RatingBar extends StatelessWidget {
             (i) => Icon(
               i < rating.floor()
                   ? Icons.star_rounded
-                  : Icons.star_outline_rounded,
-              color: Colors.amber,
+                  : i < rating
+                      ? Icons.star_half_rounded
+                      : Icons.star_outline_rounded,
+              color: i < rating.floor() || i < rating
+                  ? AppTheme.primaryColor
+                  : Colors.grey,
               size: size,
             ),
           ),
@@ -993,9 +983,14 @@ class GradientButton extends StatelessWidget {
       child: Container(
         height: height,
         decoration: BoxDecoration(
-          color: onPressed != null
-              ? AppTheme.primaryColor
-              : const Color(0xFF333333),
+          gradient: onPressed != null
+              ? const LinearGradient(
+                  colors: [Color(0xFFb026ff), Color(0xFFff2d92)],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                )
+              : null,
+          color: onPressed != null ? null : const Color(0xFF333333),
           borderRadius: BorderRadius.circular(14),
         ),
         child: Row(

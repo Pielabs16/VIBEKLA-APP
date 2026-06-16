@@ -25,7 +25,7 @@ class _VenueOwnerScreenState extends State<VenueOwnerScreen>
   @override
   void initState() {
     super.initState();
-    _tabs = TabController(length: 3, vsync: this);
+    _tabs = TabController(length: 4, vsync: this);
     _load();
   }
 
@@ -242,11 +242,21 @@ class _VenueDashboard extends StatelessWidget {
                 labelColor: AppTheme.primaryColor,
                 unselectedLabelColor: AppTheme.mutedColor,
                 labelStyle: const TextStyle(
-                    fontSize: 13, fontWeight: FontWeight.w600),
+                    fontSize: 12, fontWeight: FontWeight.w600),
                 tabs: const [
                   Tab(text: 'Overview'),
                   Tab(text: 'Events'),
                   Tab(text: 'Analytics'),
+                  Tab(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.workspace_premium_rounded, size: 14),
+                        SizedBox(width: 4),
+                        Text('Subscription', style: TextStyle(fontSize: 11)),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -260,6 +270,7 @@ class _VenueDashboard extends StatelessWidget {
               venue: venue, onAddEvent: onAddEvent, onUpgrade: onUpgrade),
           _EventsTab(events: events, onAddEvent: onAddEvent),
           _AnalyticsTab(analytics: analytics, venue: venue),
+          _SubscriptionTab(venue: venue),
         ],
       ),
     );
@@ -288,17 +299,17 @@ class _OverviewTab extends StatelessWidget {
           Row(
             children: [
               _StatBox(
-                  icon: '★',
+                  iconData: Icons.star_rounded,
                   label: 'Rating',
                   value: venue.rating.toStringAsFixed(1)),
               const SizedBox(width: 12),
               _StatBox(
-                  icon: '👥',
+                  iconData: Icons.people_rounded,
                   label: 'Check-ins',
                   value: venue.ratingCount.toString()),
               const SizedBox(width: 12),
               _StatBox(
-                  icon: '🎉',
+                  iconData: Icons.celebration_rounded,
                   label: 'Events',
                   value: venue.subscriptionTier == SubscriptionTier.premium
                       ? '∞'
@@ -310,7 +321,7 @@ class _OverviewTab extends StatelessWidget {
           const SizedBox(height: 20),
 
           _ActionCard(
-            icon: '🎉',
+            iconData: Icons.celebration_rounded,
             title: 'Add New Event',
             subtitle: 'Create and promote your events',
             color: AppTheme.primaryColor,
@@ -319,7 +330,7 @@ class _OverviewTab extends StatelessWidget {
           const SizedBox(height: 12),
           if (!isPremium) ...[
             _ActionCard(
-              icon: '⭐',
+              iconData: Icons.workspace_premium_rounded,
               title: 'Upgrade to Premium',
               subtitle:
                   'Unlimited events, top ranking & analytics',
@@ -384,7 +395,8 @@ class _EventsTab extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('🎉', style: TextStyle(fontSize: 48)),
+            const Icon(Icons.celebration_rounded,
+                size: 48, color: AppTheme.primaryColor),
             const SizedBox(height: 12),
             const Text('No events yet',
                 style: TextStyle(
@@ -468,12 +480,12 @@ class _AnalyticsTab extends StatelessWidget {
           Row(
             children: [
               _StatBox(
-                  icon: '📍',
+                  iconData: Icons.location_on_rounded,
                   label: 'Total Check-ins',
                   value: (a['totalCheckins'] ?? '—').toString()),
               const SizedBox(width: 12),
               _StatBox(
-                  icon: '📊',
+                  iconData: Icons.bar_chart_rounded,
                   label: 'Avg Rating',
                   value: venue.rating.toStringAsFixed(1)),
             ],
@@ -482,12 +494,12 @@ class _AnalyticsTab extends StatelessWidget {
           Row(
             children: [
               _StatBox(
-                  icon: '👁️',
+                  iconData: Icons.visibility_rounded,
                   label: 'Profile Views',
                   value: (a['profileViews'] ?? '—').toString()),
               const SizedBox(width: 12),
               _StatBox(
-                  icon: '🎉',
+                  iconData: Icons.celebration_rounded,
                   label: 'Active Events',
                   value: (a['activeEvents'] ?? '—').toString()),
             ],
@@ -550,13 +562,251 @@ class _AnalyticsTab extends StatelessWidget {
   }
 }
 
+class _SubscriptionTab extends StatefulWidget {
+  final Venue venue;
+  const _SubscriptionTab({required this.venue});
+
+  @override
+  State<_SubscriptionTab> createState() => _SubscriptionTabState();
+}
+
+class _SubscriptionTabState extends State<_SubscriptionTab> {
+  Map<String, dynamic>? _status;
+  bool _loading = true;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() { _loading = true; _error = null; });
+    try {
+      final result = await ApiService().subscriptionStatus(widget.venue.id);
+      if (mounted) setState(() { _status = result; _loading = false; });
+    } catch (e) {
+      if (mounted) setState(() { _loading = false; _error = e.toString(); });
+    }
+  }
+
+  Color _tierColor(String tier) {
+    switch (tier.toLowerCase()) {
+      case 'premium': return const Color(0xFFFFD700);
+      case 'pro':     return Colors.blue.shade400;
+      default:        return Colors.grey;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_loading) {
+      return const Center(
+          child: CircularProgressIndicator(color: AppTheme.primaryColor));
+    }
+    if (_error != null) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.warning_amber_rounded,
+                  size: 40, color: Colors.amber),
+              const SizedBox(height: 12),
+              Text(_error!,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontSize: 14, color: AppTheme.mutedColor)),
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: _load,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 24, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Text('Retry',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white)),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    final isActive = _status?['isActive'] == true;
+    final tier = (_status?['plan'] as String? ??
+        _status?['tier'] as String? ?? 'free').toLowerCase();
+    final endDate = _status?['endDate'] as String?;
+    final tierColor = _tierColor(tier);
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Plan tier card
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: AppTheme.surfaceColor,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                  color: tierColor.withValues(alpha: 0.35), width: 1.5),
+            ),
+            child: Column(
+              children: [
+                Icon(Icons.workspace_premium_rounded,
+                    size: 40, color: tierColor),
+                const SizedBox(height: 10),
+                Text(
+                  tier.toUpperCase(),
+                  style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w900,
+                      color: tierColor,
+                      letterSpacing: 1.5),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  isActive ? 'Active Plan' : 'No Active Plan',
+                  style: TextStyle(
+                      fontSize: 13,
+                      color: isActive
+                          ? const Color(0xFF00E676)
+                          : AppTheme.mutedColor),
+                ),
+                if (isActive && endDate != null && endDate.isNotEmpty) ...[
+                  const SizedBox(height: 10),
+                  _ExpiryBadge(endDate: endDate),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          if (!isActive)
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppTheme.surfaceColor,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.06)),
+              ),
+              child: const Column(
+                children: [
+                  Icon(Icons.workspace_premium_rounded,
+                      size: 32, color: AppTheme.mutedColor),
+                  SizedBox(height: 10),
+                  Text('No active plan',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: AppTheme.onSurfaceColor)),
+                  SizedBox(height: 6),
+                  Text(
+                    'Upgrade to unlock more events, analytics\nand top venue ranking.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 13, color: AppTheme.mutedColor),
+                  ),
+                  SizedBox(height: 16),
+                ],
+              ),
+            ),
+
+          const SizedBox(height: 16),
+
+          GestureDetector(
+            onTap: () => context.push('/payment'),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFFb026ff), Color(0xFFff2d92)],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.workspace_premium_rounded,
+                      size: 18, color: Colors.white),
+                  SizedBox(width: 8),
+                  Text('Upgrade Plan',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white)),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ExpiryBadge extends StatelessWidget {
+  final String endDate;
+  const _ExpiryBadge({required this.endDate});
+
+  @override
+  Widget build(BuildContext context) {
+    DateTime? expiry;
+    try {
+      expiry = DateTime.parse(endDate);
+    } catch (_) {}
+
+    Color color = AppTheme.onSurfaceColor;
+    String label = 'Expires: $endDate';
+
+    if (expiry != null) {
+      final now = DateTime.now();
+      final diff = expiry.difference(now).inDays;
+      if (expiry.isBefore(now)) {
+        color = Colors.red;
+        label = 'Expired: $endDate';
+      } else if (diff <= 7) {
+        color = Colors.amber;
+        label = 'Expires soon: $endDate';
+      } else {
+        label = 'Expires: $endDate';
+      }
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
+      ),
+      child: Text(label,
+          style: TextStyle(
+              fontSize: 12, fontWeight: FontWeight.w600, color: color)),
+    );
+  }
+}
+
 class _StatBox extends StatelessWidget {
-  final String icon;
+  final IconData iconData;
   final String label;
   final String value;
 
   const _StatBox(
-      {required this.icon, required this.label, required this.value});
+      {required this.iconData, required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -571,7 +821,7 @@ class _StatBox extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Text(icon, style: const TextStyle(fontSize: 20)),
+            Icon(iconData, size: 20, color: AppTheme.primaryColor),
             const SizedBox(height: 6),
             Text(value,
                 style: const TextStyle(
@@ -591,14 +841,14 @@ class _StatBox extends StatelessWidget {
 }
 
 class _ActionCard extends StatelessWidget {
-  final String icon;
+  final IconData iconData;
   final String title;
   final String subtitle;
   final Color color;
   final VoidCallback onTap;
 
   const _ActionCard({
-    required this.icon,
+    required this.iconData,
     required this.title,
     required this.subtitle,
     required this.color,
@@ -617,7 +867,7 @@ class _ActionCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Text(icon, style: const TextStyle(fontSize: 28)),
+            Icon(iconData, size: 28, color: Colors.white),
             const SizedBox(width: 14),
             Expanded(
               child: Column(
@@ -703,7 +953,8 @@ class _EventRow extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Center(
-                child: Text('🎵', style: TextStyle(fontSize: 22))),
+                child: Icon(Icons.music_note_rounded,
+                    size: 22, color: Colors.white70)),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -762,7 +1013,8 @@ class _ErrorView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('⚠️', style: TextStyle(fontSize: 40)),
+            const Icon(Icons.warning_amber_rounded,
+                size: 40, color: Colors.amber),
             const SizedBox(height: 12),
             Text(error,
                 textAlign: TextAlign.center,
@@ -804,7 +1056,8 @@ class _NoVenueView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('🏟️', style: TextStyle(fontSize: 52)),
+            const Icon(Icons.business_rounded,
+                size: 52, color: AppTheme.mutedColor),
             const SizedBox(height: 16),
             const Text(
               'No Venue Found',

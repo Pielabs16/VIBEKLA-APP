@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../providers/data_provider.dart';
@@ -357,43 +358,47 @@ class _VenueTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: AppTheme.surfaceColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: AppTheme.cardColor(venue.imageType),
-              borderRadius: BorderRadius.circular(8),
+    return InkWell(
+      onTap: () => context.push('/venue/${venue.id}'),
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: AppTheme.surfaceColor,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppTheme.cardColor(venue.imageType),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Icon(Icons.nightlife_rounded,
+                  size: 16, color: Colors.white),
             ),
-            child: const Icon(Icons.nightlife_rounded,
-                size: 16, color: Colors.white),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(venue.name,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: AppTheme.onSurfaceColor,
-                    )),
-                Text(venue.neighborhood,
-                    style: Theme.of(context).textTheme.bodySmall),
-              ],
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(venue.name,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.onSurfaceColor,
+                      )),
+                  Text(venue.neighborhood,
+                      style: Theme.of(context).textTheme.bodySmall),
+                ],
+              ),
             ),
-          ),
-          const Icon(Icons.arrow_forward_ios_rounded,
-              size: 12, color: AppTheme.mutedColor),
-        ],
+            const Icon(Icons.arrow_forward_ios_rounded,
+                size: 12, color: AppTheme.mutedColor),
+          ],
+        ),
       ),
     );
   }
